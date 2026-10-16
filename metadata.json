@@ -1,0 +1,6 @@
+{
+  "name": "SIAP KANDA - Portal Transmigrasi Terpadu Luwu Utara",
+  "description": "Sistem Informasi Data Administrasi Pengembangan Kawasan Transmigrasi Terpadu Kabupaten Luwu Utara untuk pemantauan data kependudukan, sertifikasi tanah, komoditas, dan infrastruktur secara real-time dan transparan.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
