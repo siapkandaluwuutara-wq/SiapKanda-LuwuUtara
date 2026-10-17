@@ -25,15 +25,8 @@ import { OfficerLoginModal } from './components/OfficerLoginModal';
 import { OfficerManagementModal } from './components/OfficerManagementModal';
 import { KawasanUptManagementModal } from './components/KawasanUptManagementModal';
 import { getStoredOfficers, saveStoredOfficers } from './data/officerData';
+import { DEFAULT_PORTAL_IMAGES, sanitizePortalImages } from './data/portalImages';
 import { Plus, Image as ImageIcon, ShieldCheck, UserCheck, LogOut, Users, Layers } from 'lucide-react';
-
-const DEFAULT_PORTAL_IMAGES: PortalImages = {
-  logoUrl: '/Luwu_Utara_Logo_(North_Luwu).png',
-  heroBanner: '/src/assets/images/hero_transmigrasi_luwu_1791420200639.jpg',
-  commodityKakao: '/src/assets/images/komoditas_kakao_luwu_1791420216171.jpg',
-  infrastructure: '/src/assets/images/infrastruktur_transmigrasi_1791420229259.jpg',
-  uptImages: {}
-};
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>('beranda');
@@ -78,17 +71,9 @@ export default function App() {
   const [infrastructureList] = useState(INFRASTRUCTURE_DATA);
   const [feedbackTickets, setFeedbackTickets] = useState<PublicFeedbackTicket[]>(MOCK_FEEDBACK_TICKETS);
 
-  // Portal Images State (persisted in localStorage)
+  // Portal Images State (persisted in localStorage with GitHub Pages path sanitization)
   const [portalImages, setPortalImages] = useState<PortalImages>(() => {
-    const saved = localStorage.getItem('siapkanda_portal_images');
-    if (saved) {
-      try {
-        return { ...DEFAULT_PORTAL_IMAGES, ...JSON.parse(saved) };
-      } catch {
-        return DEFAULT_PORTAL_IMAGES;
-      }
-    }
-    return DEFAULT_PORTAL_IMAGES;
+    return sanitizePortalImages(localStorage.getItem('siapkanda_portal_images'));
   });
 
   // Officer Authentication State (persisted in localStorage)

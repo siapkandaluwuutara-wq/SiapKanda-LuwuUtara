@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, ZoomIn, ExternalLink } from 'lucide-react';
+import { DEFAULT_PORTAL_IMAGES } from '../data/portalImages';
 
 interface BrandLogoProps {
   src?: string;
@@ -9,18 +10,19 @@ interface BrandLogoProps {
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
-  src = '/Luwu_Utara_Logo_(North_Luwu).png',
+  src = DEFAULT_PORTAL_IMAGES.logoUrl,
   alt = 'Lambang Daerah Kabupaten Luwu Utara',
   className = 'h-14 sm:h-16 w-auto object-contain shrink-0',
   allowZoom = false
 }) => {
   const [isZoomOpen, setIsZoomOpen] = useState(false);
+  const activeSrc = src || DEFAULT_PORTAL_IMAGES.logoUrl;
 
   return (
     <>
       <div className="relative group inline-flex items-center">
         <img
-          src={src}
+          src={activeSrc}
           alt={alt}
           className={`${className} transition-transform group-hover:scale-105`}
           style={{
@@ -30,10 +32,9 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             filter: 'none'
           }}
           onError={(e) => {
-            // Fallback jika path memerlukan relative asset
             const target = e.target as HTMLImageElement;
-            if (!target.src.includes('src/assets')) {
-              target.src = '/src/assets/images/Luwu_Utara_Logo_(North_Luwu).png';
+            if (target.src !== DEFAULT_PORTAL_IMAGES.logoUrl) {
+              target.src = DEFAULT_PORTAL_IMAGES.logoUrl || '';
             }
           }}
         />

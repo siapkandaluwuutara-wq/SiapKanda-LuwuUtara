@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { PortalImages, UPTRegion, OfficerUser } from '../types';
+import { DEFAULT_PORTAL_IMAGES } from '../data/portalImages';
 import { X, Image as ImageIcon, Upload, RefreshCw, CheckCircle2, Sparkles, Building, Layers, Eye } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
@@ -85,14 +86,8 @@ export const PhotoManagerModal: React.FC<PhotoManagerModalProps> = ({
 
   const handleResetDefaults = () => {
     if (confirm('Kembalikan semua gambar ke foto default sistem SIAP KANDA?')) {
-      const defaults: PortalImages = {
-        logoUrl: '/Luwu_Utara_Logo_(North_Luwu).png',
-        heroBanner: '/src/assets/images/hero_transmigrasi_luwu_1791420200639.jpg',
-        commodityKakao: '/src/assets/images/komoditas_kakao_luwu_1791420216171.jpg',
-        infrastructure: '/src/assets/images/infrastruktur_transmigrasi_1791420229259.jpg',
-        uptImages: {}
-      };
-      setLogoUrl(defaults.logoUrl || '/Luwu_Utara_Logo_(North_Luwu).png');
+      const defaults: PortalImages = { ...DEFAULT_PORTAL_IMAGES };
+      setLogoUrl(defaults.logoUrl || '');
       setHeroBanner(defaults.heroBanner);
       setCommodityKakao(defaults.commodityKakao);
       setInfrastructure(defaults.infrastructure);

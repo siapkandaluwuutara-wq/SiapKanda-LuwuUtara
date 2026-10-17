@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { InfrastructureItem, UPTRegion, PortalImages, OfficerUser } from '../types';
+import { DEFAULT_PORTAL_IMAGES } from '../data/portalImages';
 import { 
   Building, 
   Droplets, 
@@ -43,7 +44,7 @@ export const InfrastructureMonitor: React.FC<InfrastructureMonitorProps> = ({
     return matchesKawasan && matchesCat && matchesUpt;
   });
 
-  const infraPhoto = images?.infrastructure || '/src/assets/images/infrastruktur_transmigrasi_1791420229259.jpg';
+  const infraPhoto = images?.infrastructure || DEFAULT_PORTAL_IMAGES.infrastructure;
 
   return (
     <div className="space-y-8">
