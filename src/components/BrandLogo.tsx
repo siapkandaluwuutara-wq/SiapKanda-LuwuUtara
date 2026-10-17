@@ -10,13 +10,14 @@ interface BrandLogoProps {
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
-  src = DEFAULT_PORTAL_IMAGES.logoUrl,
+  src,
   alt = 'Lambang Daerah Kabupaten Luwu Utara',
   className = 'h-14 sm:h-16 w-auto object-contain shrink-0',
   allowZoom = false
 }) => {
   const [isZoomOpen, setIsZoomOpen] = useState(false);
-  const activeSrc = src || DEFAULT_PORTAL_IMAGES.logoUrl;
+  // Pastikan selalu menggunakan aset bundel Vite jika src berupa absolute root path '/' atau kosong
+  const activeSrc = (!src || src.startsWith('/')) ? DEFAULT_PORTAL_IMAGES.logoUrl : src;
 
   return (
     <>

@@ -31,11 +31,11 @@ import { Plus, Image as ImageIcon, ShieldCheck, UserCheck, LogOut, Users, Layers
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>('beranda');
   
-  // App data state (persisted in localStorage)
+  // App data state (persisted in localStorage with safe try-catch)
   const [uptList, setUptList] = useState<UPTRegion[]>(() => {
-    const saved = localStorage.getItem('siapkanda_upt_data');
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem('siapkanda_upt_data');
+      if (saved) {
         const parsed: UPTRegion[] = JSON.parse(saved);
         // Synchronize coordinates with exact updated GIS coordinates
         return parsed.map((item) => {
@@ -48,33 +48,33 @@ export default function App() {
           }
           return item;
         });
-      } catch {
-        return UPT_DATA;
       }
+    } catch (e) {
+      console.warn('Storage read failed for UPT data:', e);
     }
     return UPT_DATA;
   });
 
   const [kawasanList, setKawasanList] = useState<KawasanInfo[]>(() => {
-    const saved = localStorage.getItem('siapkanda_kawasan_data');
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem('siapkanda_kawasan_data');
+      if (saved) {
         return JSON.parse(saved);
-      } catch {
-        return KAWASAN_SUMMARY;
       }
+    } catch (e) {
+      console.warn('Storage read failed for kawasan data:', e);
     }
     return KAWASAN_SUMMARY;
   });
 
   const [kkList, setKkList] = useState<TransmigrantKK[]>(() => {
-    const saved = localStorage.getItem('siapkanda_kk_data');
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem('siapkanda_kk_data');
+      if (saved) {
         return JSON.parse(saved);
-      } catch {
-        return MOCK_TRANSMIGRANT_KK;
       }
+    } catch (e) {
+      console.warn('Storage read failed for KK data:', e);
     }
     return MOCK_TRANSMIGRANT_KK;
   });
@@ -84,19 +84,29 @@ export default function App() {
 
   // Portal Images State (persisted in localStorage with GitHub Pages path sanitization)
   const [portalImages, setPortalImages] = useState<PortalImages>(() => {
-    return sanitizePortalImages(localStorage.getItem('siapkanda_portal_images'));
+    try {
+      return sanitizePortalImages(localStorage.getItem('siapkanda_portal_images'));
+    } catch {
+      return DEFAULT_PORTAL_IMAGES;
+    }
   });
 
   // Officer Authentication State (persisted in localStorage)
-  const [officersList, setOfficersList] = useState<OfficerAccount[]>(() => getStoredOfficers());
+  const [officersList, setOfficersList] = useState<OfficerAccount[]>(() => {
+    try {
+      return getStoredOfficers();
+    } catch {
+      return [];
+    }
+  });
   const [currentOfficer, setCurrentOfficer] = useState<OfficerUser | null>(() => {
-    const saved = localStorage.getItem('siapkanda_current_officer');
-    if (saved) {
-      try {
+    try {
+      const saved = localStorage.getItem('siapkanda_current_officer');
+      if (saved) {
         return JSON.parse(saved);
-      } catch {
-        return null;
       }
+    } catch (e) {
+      console.warn('Storage read failed for current officer:', e);
     }
     return null;
   });
@@ -136,20 +146,32 @@ export default function App() {
     }
   };
 
-  // Sync state to LocalStorage
+  // Sync state to LocalStorage with safe try-catch
   useEffect(() => {
-    localStorage.setItem('siapkanda_kk_data', JSON.stringify(kkList));
+    try {
+      localStorage.setItem('siapkanda_kk_data', JSON.stringify(kkList));
+    } catch (e) {
+      console.warn('Storage write skipped for kk_data:', e);
+    }
   }, [kkList]);
 
   useEffect(() => {
-    localStorage.setItem('siapkanda_portal_images', JSON.stringify(portalImages));
+    try {
+      localStorage.setItem('siapkanda_portal_images', JSON.stringify(portalImages));
+    } catch (e) {
+      console.warn('Storage write skipped for portal_images:', e);
+    }
   }, [portalImages]);
 
   useEffect(() => {
-    if (currentOfficer) {
-      localStorage.setItem('siapkanda_current_officer', JSON.stringify(currentOfficer));
-    } else {
-      localStorage.removeItem('siapkanda_current_officer');
+    try {
+      if (currentOfficer) {
+        localStorage.setItem('siapkanda_current_officer', JSON.stringify(currentOfficer));
+      } else {
+        localStorage.removeItem('siapkanda_current_officer');
+      }
+    } catch (e) {
+      console.warn('Storage write skipped for current_officer:', e);
     }
   }, [currentOfficer]);
 
@@ -166,7 +188,11 @@ export default function App() {
   const handleSaveUPT = (updatedUPT: UPTRegion) => {
     setUptList(prev => {
       const next = prev.map(u => u.id === updatedUPT.id ? updatedUPT : u);
-      localStorage.setItem('siapkanda_upt_data', JSON.stringify(next));
+      try {
+        localStorage.setItem('siapkanda_upt_data', JSON.stringify(next));
+      } catch (e) {
+        console.warn('Storage write skipped for upt_data:', e);
+      }
       return next;
     });
     if (selectedUPT && selectedUPT.id === updatedUPT.id) {
@@ -177,7 +203,11 @@ export default function App() {
   const handleSaveKawasan = (updatedKawasan: KawasanInfo) => {
     setKawasanList(prev => {
       const next = prev.map(k => k.id === updatedKawasan.id ? updatedKawasan : k);
-      localStorage.setItem('siapkanda_kawasan_data', JSON.stringify(next));
+      try {
+        localStorage.setItem('siapkanda_kawasan_data', JSON.stringify(next));
+      } catch (e) {
+        console.warn('Storage write skipped for kawasan_data:', e);
+      }
       return next;
     });
   };
@@ -185,8 +215,12 @@ export default function App() {
   const handleResetKawasanUptToDefault = () => {
     setUptList(UPT_DATA);
     setKawasanList(KAWASAN_SUMMARY);
-    localStorage.removeItem('siapkanda_upt_data');
-    localStorage.removeItem('siapkanda_kawasan_data');
+    try {
+      localStorage.removeItem('siapkanda_upt_data');
+      localStorage.removeItem('siapkanda_kawasan_data');
+    } catch (e) {
+      console.warn('Storage removal failed:', e);
+    }
   };
 
   const handleEditKawasan = (kawasan: KawasanInfo) => {

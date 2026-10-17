@@ -2,17 +2,28 @@
 <html lang="id">
   <head>
     <meta charset="utf-8">
-    <title>SIAP KANDA - Luwu Utara</title>
+    <title>SIAP KANDA - Portal Transmigrasi Luwu Utara</title>
     <script>
       // Single Page App redirect for GitHub Pages
-      // Stores current path/query in sessionStorage and redirects to root
-      sessionStorage.redirect = location.href;
+      (function() {
+        try {
+          var l = window.location;
+          sessionStorage.setItem('siapkanda_redirect', l.href);
+          // Redirect to base path
+          var pathSegments = l.pathname.split('/').filter(Boolean);
+          var basePath = pathSegments.length > 0 ? '/' + pathSegments[0] + '/' : '/';
+          l.replace(l.protocol + '//' + l.host + basePath);
+        } catch (e) {
+          window.location.replace('./');
+        }
+      })();
     </script>
     <meta http-equiv="refresh" content="0;URL='./'">
   </head>
-  <body>
-    <p style="font-family: sans-serif; text-align: center; margin-top: 50px; color: #64748b;">
-      Memuat SIAP KANDA Portal Transmigrasi Kabupaten Luwu Utara...
-    </p>
+  <body style="font-family: system-ui, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #0f172a; color: #f8fafc;">
+    <div style="text-align: center;">
+      <h3 style="color: #34d399; margin-bottom: 8px;">SIAP KANDA Luwu Utara</h3>
+      <p style="color: #94a3b8; font-size: 13px;">Mengarahkan kembali ke portal utama...</p>
+    </div>
   </body>
 </html>

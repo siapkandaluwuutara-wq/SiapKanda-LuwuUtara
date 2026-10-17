@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,19 +14,70 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script>
-      // Single Page App redirect handler for GitHub Pages
-      (function(){
-        var redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect !== location.href) {
-          history.replaceState(null, null, redirect);
+      // 1. Normalisasi Trailing Slash untuk GitHub Pages Subdirectory Path
+      // Mencegah error MIME type text/html saat repo diakses tanpa trailing slash (misal: user.github.io/repo)
+      (function() {
+        try {
+          var path = window.location.pathname;
+          if (path && !path.endsWith('/') && !path.split('/').pop().includes('.')) {
+            var newUrl = window.location.protocol + '//' + window.location.host + path + '/' + window.location.search + window.location.hash;
+            window.location.replace(newUrl);
+            return;
+          }
+          // 2. Pemulihan Redirect SPA dari 404.html jika ada
+          if (window.sessionStorage) {
+            var redirect = sessionStorage.getItem('siapkanda_redirect');
+            if (redirect) {
+              sessionStorage.removeItem('siapkanda_redirect');
+              if (redirect !== location.href) {
+                history.replaceState(null, null, redirect);
+              }
+            }
+          }
+        } catch(e) {
+          console.warn('GitHub Pages routing guard:', e);
         }
       })();
     </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Branded Preloader: Menghilangkan Halaman Putih Kosong Saat Memuat Aset -->
+      <div id="siapkanda-initial-loader" style="min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #0f172a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; color: #f8fafc; padding: 24px; text-align: center;">
+        <div style="width: 76px; height: 76px; margin-bottom: 20px; border-radius: 20px; background: rgba(16, 185, 129, 0.12); border: 1.5px solid rgba(16, 185, 129, 0.3); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);">
+          <img src="./Luwu_Utara_Logo_(North_Luwu).png" alt="Logo Luwu Utara" style="width: 52px; height: 52px; object-fit: contain;" onerror="this.style.display='none'" />
+        </div>
+        <div style="font-size: 22px; font-weight: 800; color: #34d399; letter-spacing: -0.02em; margin-bottom: 4px;">
+          SIAP KANDA
+        </div>
+        <div style="font-size: 13px; font-weight: 600; color: #94a3b8; max-width: 320px; margin-bottom: 24px; line-height: 1.5;">
+          Portal Administrasi & Peta Kawasan Transmigrasi Terpadu Kabupaten Luwu Utara
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; background: rgba(30, 41, 59, 0.8); border: 1px solid #334155; padding: 8px 16px; border-radius: 9999px; font-size: 12px; color: #cbd5e1;">
+          <div style="width: 14px; height: 14px; border: 2px solid #334155; border-top-color: #10b981; border-radius: 50%; animation: siap-loader-spin 0.75s linear infinite;"></div>
+          <span>Memuat sistem & data kawasan...</span>
+        </div>
+
+        <!-- Tombol Bantuan Pemulihan Otomatis Jika Koneksi Lambat -->
+        <div id="siapkanda-timeout-helper" style="display: none; margin-top: 24px;">
+          <p style="font-size: 11px; color: #94a3b8; margin-bottom: 10px;">Proses pemuatan membutuhkan waktu lebih lama?</p>
+          <button onclick="localStorage.clear(); sessionStorage.clear(); window.location.reload();" style="background: #10b981; color: #ffffff; border: none; padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer;">
+            Reset Cache & Muat Ulang
+          </button>
+        </div>
+      </div>
+      <style>
+        @keyframes siap-loader-spin {
+          to { transform: rotate(360deg); }
+        }
+      </style>
+      <script>
+        setTimeout(function() {
+          var helper = document.getElementById('siapkanda-timeout-helper');
+          if (helper) helper.style.display = 'block';
+        }, 6000);
+      </script>
+    </div>
     <script type="module" src="./src/main.tsx"></script>
   </body>
 </html>
-
