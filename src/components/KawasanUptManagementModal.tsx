@@ -734,7 +734,7 @@ export const KawasanUptManagementModal: React.FC<KawasanUptManagementModalProps>
                       </label>
                       <input
                         type="number"
-                        step="0.0001"
+                        step="any"
                         value={editingUPT.coordinates.lat}
                         onChange={(e) => setEditingUPT({
                           ...editingUPT,
@@ -750,7 +750,7 @@ export const KawasanUptManagementModal: React.FC<KawasanUptManagementModalProps>
                       </label>
                       <input
                         type="number"
-                        step="0.0001"
+                        step="any"
                         value={editingUPT.coordinates.lng}
                         onChange={(e) => setEditingUPT({
                           ...editingUPT,

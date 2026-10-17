@@ -17,7 +17,7 @@ export const INITIAL_OFFICER_ACCOUNTS: OfficerAccount[] = [
   {
     userId: 'petugas_lapangan',
     nip: '199208242018031002',
-    name: 'Rahmat Hidayat, S.P.',
+    name: 'Halifah',
     role: 'Petugas Lapangan',
     office: 'Koordinator Lapangan Kawasan Masamba & Baebunta',
     passwordHash: 'seko2026',
@@ -30,7 +30,7 @@ export const INITIAL_OFFICER_ACCOUNTS: OfficerAccount[] = [
   {
     userId: 'petugas_sukamaju',
     nip: '199503152021021003',
-    name: 'Andi Baso Tenri, S.ST.',
+    name: 'Rasmuliati',
     role: 'Petugas Lapangan',
     office: 'Petugas Lapangan Wilayah Sukamaju & Bone-Bone',
     passwordHash: 'lapangan2026',
@@ -43,7 +43,7 @@ export const INITIAL_OFFICER_ACCOUNTS: OfficerAccount[] = [
   {
     userId: 'petugas_seko',
     nip: '199011042019031005',
-    name: 'Hasanuddin, S.Hut.',
+    name: 'Hasbi',
     role: 'Petugas Lapangan',
     office: 'Petugas Lapangan Kawasan Seko (Wilayah Terisolir)',
     passwordHash: 'seko123',
@@ -56,7 +56,7 @@ export const INITIAL_OFFICER_ACCOUNTS: OfficerAccount[] = [
   {
     userId: 'petugas_disnakertrans',
     nip: '198507142010011008',
-    name: 'Ir. A. Mappanyukki, S.T.',
+    name: 'Asriani, SE',
     role: 'Petugas Verifikator',
     office: 'Seksi Penataan Persebaran & Sertifikasi Disnakertrans Luwu Utara',
     passwordHash: 'masamba2026',

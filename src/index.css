@@ -23,3 +23,38 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Leaflet WebGIS SIPUKAT Customizations */
+.custom-sipukat-popup .leaflet-popup-content-wrapper {
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e2e8f0;
+}
+.custom-sipukat-popup .leaflet-popup-content {
+  margin: 8px 10px;
+}
+.custom-sipukat-popup .leaflet-popup-tip {
+  background: white;
+}
+.gis-poly-tooltip {
+  background: rgba(15, 23, 42, 0.92) !important;
+  backdrop-filter: blur(4px);
+  border: 1px solid #334155 !important;
+  color: #f8fafc !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  padding: 4px 8px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3) !important;
+}
+.gis-poly-tooltip::before {
+  border-top-color: rgba(15, 23, 42, 0.92) !important;
+}
+.custom-gis-upt-pin {
+  background: transparent !important;
+  border: none !important;
+}
+.custom-landmark-icon {
+  background: transparent !important;
+  border: none !important;
+}

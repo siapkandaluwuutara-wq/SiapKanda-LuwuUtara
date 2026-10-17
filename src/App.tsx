@@ -36,7 +36,18 @@ export default function App() {
     const saved = localStorage.getItem('siapkanda_upt_data');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed: UPTRegion[] = JSON.parse(saved);
+        // Synchronize coordinates with exact updated GIS coordinates
+        return parsed.map((item) => {
+          const defaultUPT = UPT_DATA.find((u) => u.id === item.id);
+          if (defaultUPT) {
+            return {
+              ...item,
+              coordinates: defaultUPT.coordinates
+            };
+          }
+          return item;
+        });
       } catch {
         return UPT_DATA;
       }

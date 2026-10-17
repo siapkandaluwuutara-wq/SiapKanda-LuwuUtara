@@ -21,6 +21,7 @@ import {
   Edit3
 } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
+import { KawasanStatisticChart } from './KawasanStatisticChart';
 
 interface DashboardOverviewProps {
   uptList: UPTRegion[];
@@ -206,130 +207,31 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Card 1: Kawasan Masamba */}
-          <div 
-            onClick={() => setActiveKawasanFilter(activeKawasanFilter === 'Kawasan Masamba' ? 'all' : 'Kawasan Masamba')}
-            className={`p-6 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
-              activeKawasanFilter === 'Kawasan Masamba'
-                ? 'bg-emerald-50/50 border-emerald-600 ring-2 ring-emerald-600/20 shadow-sm'
-                : 'bg-white border-slate-200 hover:border-slate-300'
-            }`}
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">
-                  Sentra Lembah & Hinterland (Kec. Baebunta, Masamba, Sukamaju, Bone-Bone)
-                </span>
-                <h3 className="text-xl font-extrabold text-slate-900 mt-0.5">
-                  1. {masambaKawasan.name} ({masambaUPTs.length} UPT)
-                </h3>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                {isMainAdmin && onEditKawasan && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditKawasan(masambaKawasan);
-                    }}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
-                    title={`Edit seluruh data ${masambaKawasan.name}`}
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                    <span>Edit Kawasan</span>
-                  </button>
-                )}
-                <span className="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 text-xs font-mono font-bold">
-                  {masambaKawasan.uptCount} UPT Aktif
-                </span>
-              </div>
-            </div>
+          {/* Card 1: Grafik Statistik Sentra Lembah & Hinterland Kawasan Masamba */}
+          <KawasanStatisticChart
+            kawasanInfo={masambaKawasan}
+            uptList={masambaUPTs}
+            theme="emerald"
+            subtitle="Sentra Lembah & Hinterland (Kec. Baebunta, Masamba, Sukamaju, Bone-Bone)"
+            isMainAdmin={isMainAdmin}
+            isActiveFilter={activeKawasanFilter === 'Kawasan Masamba'}
+            onToggleFilter={() => setActiveKawasanFilter(activeKawasanFilter === 'Kawasan Masamba' ? 'all' : 'Kawasan Masamba')}
+            onSelectUPT={onSelectUPT}
+            onEditKawasan={onEditKawasan}
+          />
 
-            <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-              {masambaKawasan.description}
-            </p>
-
-            {/* List 6 UPTs with explicit subdistrict badges */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-3">
-              {masambaUPTs.map((u) => (
-                <div key={u.id} className="p-2.5 bg-slate-50 rounded-lg border border-slate-200/80 text-xs">
-                  <span className="font-bold text-slate-900 block truncate">{u.name}</span>
-                  <span className="text-[10px] text-emerald-800 font-semibold block truncate">{u.district}</span>
-                  <span className="text-[11px] text-slate-500 font-mono mt-0.5 block">{u.totalKK} KK &middot; SHM {u.shmCompletedPercentage}%</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span>Total Luas: <strong className="font-mono text-slate-800">{masambaKawasan.totalAreaHa.toLocaleString('id-ID')} Ha</strong></span>
-              <span className="text-emerald-700 font-medium">
-                {activeKawasanFilter === 'Kawasan Masamba' ? 'Sedang Difilter' : 'Klik untuk Memfilter &rarr;'}
-              </span>
-            </div>
-          </div>
-
-          {/* Card 2: Kawasan Seko */}
-          <div 
-            onClick={() => setActiveKawasanFilter(activeKawasanFilter === 'Kawasan Seko' ? 'all' : 'Kawasan Seko')}
-            className={`p-6 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
-              activeKawasanFilter === 'Kawasan Seko'
-                ? 'bg-amber-50/50 border-amber-600 ring-2 ring-amber-600/20 shadow-sm'
-                : 'bg-white border-slate-200 hover:border-slate-300'
-            }`}
-          >
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-xs font-bold text-amber-800 uppercase tracking-wider flex items-center gap-1">
-                  <Mountain className="w-3.5 h-3.5" />
-                  Sentra Dataran Tinggi (1.100 - 1.800 mdpl)
-                </span>
-                <h3 className="text-xl font-extrabold text-slate-900 mt-0.5">
-                  2. {sekoKawasan.name} ({sekoUPTs.length} UPT)
-                </h3>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                {isMainAdmin && onEditKawasan && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditKawasan(sekoKawasan);
-                    }}
-                    className="flex items-center gap-1 px-2.5 py-1 rounded bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
-                    title={`Edit seluruh data ${sekoKawasan.name}`}
-                  >
-                    <Edit3 className="w-3.5 h-3.5" />
-                    <span>Edit Kawasan</span>
-                  </button>
-                )}
-                <span className="px-2.5 py-1 rounded bg-amber-100 text-amber-800 text-xs font-mono font-bold">
-                  {sekoKawasan.uptCount} UPT Aktif
-                </span>
-              </div>
-            </div>
-
-            <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-              {sekoKawasan.description}
-            </p>
-
-            {/* List Seko UPTs */}
-            <div className="grid grid-cols-2 gap-2 pt-3">
-              {sekoUPTs.map((u) => (
-                <div key={u.id} className="p-2.5 bg-slate-50 rounded-lg border border-slate-200/80 text-xs">
-                  <span className="font-bold text-slate-900 block truncate">{u.name}</span>
-                  <span className="text-[10px] text-amber-800 font-semibold block truncate">{u.district}</span>
-                  <span className="text-[11px] text-slate-500 font-mono mt-0.5 block">{u.totalKK} KK &middot; SHM {u.shmCompletedPercentage}%</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span>Total Luas: <strong className="font-mono text-slate-800">{sekoKawasan.totalAreaHa.toLocaleString('id-ID')} Ha</strong></span>
-              <span className="text-amber-700 font-medium">
-                {activeKawasanFilter === 'Kawasan Seko' ? 'Sedang Difilter' : 'Klik untuk Memfilter &rarr;'}
-              </span>
-            </div>
-          </div>
+          {/* Card 2: Grafik Statistik Sentra Dataran Tinggi Kawasan Seko */}
+          <KawasanStatisticChart
+            kawasanInfo={sekoKawasan}
+            uptList={sekoUPTs}
+            theme="amber"
+            subtitle="Sentra Dataran Tinggi (1.100 - 1.800 mdpl)"
+            isMainAdmin={isMainAdmin}
+            isActiveFilter={activeKawasanFilter === 'Kawasan Seko'}
+            onToggleFilter={() => setActiveKawasanFilter(activeKawasanFilter === 'Kawasan Seko' ? 'all' : 'Kawasan Seko')}
+            onSelectUPT={onSelectUPT}
+            onEditKawasan={onEditKawasan}
+          />
         </div>
       </section>
 

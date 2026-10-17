@@ -41,7 +41,7 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Baik',
     waterAccessPercentage: 95.0,
     electricityPercentage: 98.0,
-    coordinates: { x: 52, y: 44, lat: -2.5510, lng: 120.3450 },
+    coordinates: { x: 52, y: 43, lat: -2.484164800170817, lng: 120.35237561132573 },
     healthFacility: 'Pustu Lantang Tallang & Poskesdes',
     educationFacility: 'SD Inpres Lantang Tallang & PAUD Melati',
     description: 'Sentra agribisnis kakao fermentasi dan kelapa sawit rakyat dengan integrasi peternakan sapi potong di bawah naungan Kawasan Masamba.'
@@ -64,7 +64,7 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Baik',
     waterAccessPercentage: 92.5,
     electricityPercentage: 97.0,
-    coordinates: { x: 56, y: 46, lat: -2.5645, lng: 120.3680 },
+    coordinates: { x: 56, y: 45, lat: -2.494737611899041, lng: 120.37484026984379 },
     healthFacility: 'Pustu Sepakat Masamba',
     educationFacility: 'SD Negeri Sepakat & MTs Filial',
     description: 'Kawasan lumbung pangan padi irigasi teknis mandiri yang mengintegrasikan budidaya padi sawah dengan tanaman kakao pekarangan.'
@@ -87,7 +87,7 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Sedang',
     waterAccessPercentage: 89.0,
     electricityPercentage: 94.5,
-    coordinates: { x: 48, y: 42, lat: -2.5320, lng: 120.3210 },
+    coordinates: { x: 46, y: 42, lat: -2.4821428623349435, lng: 120.29967824900835 },
     healthFacility: 'Pustu Maipi & Bidan Desa',
     educationFacility: 'SD Inpres Maipi',
     description: 'Sentra perkebunan kakao klonal unggul dan penyulingan minyak nilam di perbukitan Masamba yang berkembang pesat.'
@@ -110,7 +110,7 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Sedang',
     waterAccessPercentage: 85.0,
     electricityPercentage: 92.0,
-    coordinates: { x: 40, y: 52, lat: -2.5932, lng: 120.3150 },
+    coordinates: { x: 41, y: 50, lat: -2.5330688149641256, lng: 120.23959766641215 },
     healthFacility: 'Poskesdes Buso & Bidan Desa',
     educationFacility: 'SD Negeri Buso',
     description: 'Pengembangan kawasan transmigrasi Kecamatan Baebunta berbasis kemitraan perkebunan sawit rakyat dan tanaman pangan jagung hibrida.'
@@ -133,7 +133,7 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Sedang',
     waterAccessPercentage: 81.0,
     electricityPercentage: 90.0,
-    coordinates: { x: 62, y: 46, lat: -2.5621, lng: 120.4851 },
+    coordinates: { x: 64, y: 51, lat: -2.5392249651098333, lng: 120.4376243107005 },
     healthFacility: 'Pustu Pongkase & Posyandu Sukamaju',
     educationFacility: 'SD Inpres Pongkase',
     description: 'Kawasan transmigrasi Kecamatan Sukamaju penopang sayur-mayur, buah segar, dan perkebunan kakao rakyat yang produktif.'
@@ -156,7 +156,7 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Perlu Perbaikan',
     waterAccessPercentage: 78.5,
     electricityPercentage: 86.0,
-    coordinates: { x: 74, y: 43, lat: -2.5855, lng: 120.6214 },
+    coordinates: { x: 72, y: 52, lat: -2.5405581702052467, lng: 120.50171588029805 },
     healthFacility: 'Pustu Bantimurung & Puskesmas Pembantu Bone-Bone',
     educationFacility: 'SD Inpres Bantimurung',
     description: 'Kawasan transmigrasi Kecamatan Bone-Bone dengan fokus akselerasi sertifikasi tanah SHM dan pembangunan jalan poros usaha tani.'
@@ -181,14 +181,14 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Perlu Perbaikan',
     waterAccessPercentage: 72.0,
     electricityPercentage: 68.0,
-    coordinates: { x: 24, y: 22, lat: -2.1720, lng: 119.9650 },
+    coordinates: { x: 22, y: 20, lat: -2.2749475818458698, lng: 119.88790396531842 },
     healthFacility: 'Puskesmas Perawatan Seko & Pustu Padang',
     educationFacility: 'SD Satu Atap Seko Padang & SMPN 1 Seko',
     description: 'Sentra agrowisata dataran tinggi Seko dengan komoditas unggulan kopi arabika organik premium dan beras aromatik Tarone.'
   },
   {
     id: 'upt-seko-hoyane',
-    name: 'UPT Hoyane-Beroppa',
+    name: 'UPT Lodang',
     kawasan: 'Kawasan Seko',
     district: 'Kecamatan Seko',
     yearEstablished: 2016,
@@ -204,7 +204,7 @@ export const UPT_DATA: UPTRegion[] = [
     roadCondition: 'Perlu Perbaikan',
     waterAccessPercentage: 65.0,
     electricityPercentage: 60.0,
-    coordinates: { x: 28, y: 26, lat: -2.1950, lng: 120.0210 },
+    coordinates: { x: 26, y: 28, lat: -2.3440483351861223, lng: 119.93371232499706 },
     healthFacility: 'Pustu Hoyane & Poskesdes',
     educationFacility: 'SD Filial Hoyane',
     description: 'Kawasan perbatasan dan pengembangan baru di dataran tinggi Seko dengan fokus percepatan sertifikasi HPL dan infrastruktur dasar.'
