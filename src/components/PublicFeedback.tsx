@@ -64,7 +64,7 @@ export const PublicFeedback: React.FC<PublicFeedbackProps> = ({
       deskripsi: deskripsi,
       tanggalLapor: new Date().toISOString().slice(0, 10),
       status: 'Diterima',
-      catatanPetugas: 'Laporan telah masuk ke sistem antrean verifikasi lapangan Dinas Tenaga Kerja dan Transmigrasi Kabupaten Luwu Utara.'
+      catatanPetugas: 'Laporan telah masuk ke sistem antrean verifikasi lapangan Dinas Transmigrasi dan Tenaga Kerja Kabupaten Luwu Utara.'
     };
 
     onAddTicket(newTicket);

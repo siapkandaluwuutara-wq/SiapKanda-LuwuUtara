@@ -556,7 +556,7 @@ export const OfficerManagementModal: React.FC<OfficerManagementModalProps> = ({
         {/* Modal Footer */}
         <div className="p-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
           <span className="text-[11px] text-slate-500">
-            Total {officers.length} akun terdaftar di Dinas Tenaga Kerja dan Transmigrasi Kab. Luwu Utara
+            Total {officers.length} akun terdaftar di Dinas Transmigrasi dan Tenaga Kerja Kab. Luwu Utara
           </span>
           <button
             onClick={onClose}
