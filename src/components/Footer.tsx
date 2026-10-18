@@ -29,13 +29,13 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, logoUrl = '/Luwu_Uta
                   </span>
                 </div>
                 <div className="text-xs text-slate-400">
-                  Dinas Tenaga Kerja dan Transmigrasi Kab. Luwu Utara
+                  Dinas Transmigrasi dan Tenaga Kerja Kab. Luwu Utara
                 </div>
               </div>
             </div>
             <p className="text-sm text-slate-300 max-w-xl leading-relaxed">
               Sistem Informasi Data Administrasi Pengembangan Kawasan Transmigrasi Terpadu.
-              Inisiatif Pemerintah Kabupaten Luwu Utara melalui Dinas Tenaga Kerja dan Transmigrasi
+              Inisiatif Pemerintah Kabupaten Luwu Utara melalui Dinas Transmigrasi dan Tenaga Kerja
               untuk menjamin akuntabilitas, percepatan sertifikasi hak atas tanah (SHM), dan pemantauan
               kesejahteraan warga transmigran secara transparan dan terintegrasi.
             </p>
@@ -114,7 +114,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, logoUrl = '/Luwu_Uta
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-slate-400 shrink-0" />
-                <span>(0473) 321-182 / Hotline 0852-9900-5421</span>
+                <span>(0473) 21001 / Hotline 0821-9977-0066</span>
               </div>
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-slate-400 shrink-0" />

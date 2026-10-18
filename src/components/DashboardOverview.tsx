@@ -115,7 +115,7 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
             />
             <div>
               <div className="flex items-center gap-2 text-xs font-semibold tracking-wide text-emerald-300 uppercase">
-                <span>Dinas Tenaga Kerja & Transmigrasi Kab. Luwu Utara</span>
+                <span>Dinas Transmigrasi dan Tenaga Kerja Kab. Luwu Utara</span>
                 <span aria-hidden="true">&middot;</span>
                 <span>2 Kawasan Terpadu (Masamba & Seko)</span>
               </div>
