@@ -31,7 +31,7 @@ interface DashboardOverviewProps {
   onOpenCheckModal: () => void;
   images: PortalImages;
   currentOfficer: OfficerUser | null;
-  onOpenPhotoModal: () => void;
+  onOpenPhotoModal?: () => void;
   kawasanList?: KawasanInfo[];
   onEditKawasan?: (kawasan: KawasanInfo) => void;
   onEditUPT?: (upt: UPTRegion) => void;
@@ -54,9 +54,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
 }) => {
   const [activeKawasanFilter, setActiveKawasanFilter] = useState<'all' | KawasanName>('all');
   const isMainAdmin = Boolean(
-    currentOfficer?.isAdmin || 
-    currentOfficer?.nip === '197909202010011002' || 
-    currentOfficer?.role === 'Administrator Utama'
+    currentOfficer && (
+      currentOfficer.isAdmin || 
+      currentOfficer.nip === '197909202010011002' || 
+      currentOfficer.role === 'Administrator Utama' ||
+      currentOfficer.userId === 'iswady_admin'
+    )
   );
 
   const effectiveKawasanList = kawasanList && kawasanList.length > 0 ? kawasanList : KAWASAN_SUMMARY;
@@ -93,12 +96,12 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/65 to-slate-900/30" />
         </div>
 
-        {/* Officer Quick Edit Photo Badge */}
-        {currentOfficer && (
+        {/* Officer Quick Edit Photo Badge (Khusus Admin Utama) */}
+        {isMainAdmin && onOpenPhotoModal && (
           <button
             onClick={onOpenPhotoModal}
             className="absolute top-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/80 hover:bg-slate-900 text-white text-xs font-semibold backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-lg"
-            title="Ganti foto hero banner ini"
+            title="Ganti foto hero banner ini (Khusus Admin Utama)"
           >
             <ImageIcon className="w-3.5 h-3.5 text-emerald-400" />
             <span>Ganti Foto Hero Banner</span>
@@ -465,11 +468,11 @@ export const DashboardOverview: React.FC<DashboardOverviewProps> = ({
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
-            {currentOfficer && (
+            {isMainAdmin && onOpenPhotoModal && (
               <button
                 onClick={onOpenPhotoModal}
                 className="absolute top-3 right-3 z-20 flex items-center gap-1.5 px-2.5 py-1 rounded bg-slate-900/80 hover:bg-slate-900 text-white text-[11px] font-medium backdrop-blur-md border border-white/20 transition-all cursor-pointer"
-                title="Ganti foto komoditas"
+                title="Ganti foto komoditas (Khusus Admin Utama)"
               >
                 <Edit2 className="w-3 h-3 text-emerald-400" />
                 <span>Ganti Foto</span>

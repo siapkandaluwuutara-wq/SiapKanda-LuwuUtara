@@ -304,6 +304,18 @@ export default function App() {
   };
 
   const handleUpdateImages = (newImages: PortalImages) => {
+    const isMainAdmin = Boolean(
+      currentOfficer && (
+        currentOfficer.isAdmin || 
+        currentOfficer.nip === '197909202010011002' || 
+        currentOfficer.role === 'Administrator Utama' ||
+        currentOfficer.userId === 'iswady_admin'
+      )
+    );
+    if (!isMainAdmin) {
+      alert('Akses Ditolak: Hanya Administrator Utama yang berwenang mengubah foto portal.');
+      return;
+    }
     setPortalImages(newImages);
   };
 
@@ -399,72 +411,81 @@ export default function App() {
     setIsEditInfraModalOpen(true);
   };
 
+  const isCurrentOfficerAdmin = Boolean(
+    currentOfficer && (
+      currentOfficer.isAdmin || 
+      currentOfficer.nip === '197909202010011002' || 
+      currentOfficer.role === 'Administrator Utama' ||
+      currentOfficer.userId === 'iswady_admin'
+    )
+  );
+
   return (
     <div className="min-h-screen bg-slate-100/70 text-slate-900 flex flex-col font-sans selection:bg-emerald-200 selection:text-emerald-900">
       {/* Officer Top Status Notification Bar when Logged In */}
-      {currentOfficer && (() => {
-        const isMainAdmin = currentOfficer.isAdmin || currentOfficer.nip === '197909202010011002';
-        return (
-          <div className={`${isMainAdmin ? 'bg-amber-700' : 'bg-emerald-800'} text-white text-xs px-4 py-2 font-medium flex items-center justify-between shadow-xs transition-colors`}>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between max-w-7xl mx-auto w-full gap-2">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse shrink-0" />
-                <span>
-                  <strong>{isMainAdmin ? 'Hak Akses Penuh (Administrator Utama):' : 'Sesi Petugas Aktif:'}</strong> {currentOfficer.name} (NIP: {currentOfficer.nip} &middot; {currentOfficer.role}).
-                  {isMainAdmin 
-                    ? ' Hak akses penuh aktif: edit data 2 kawasan & 8 UPT, input/edit data transmigran, manajemen foto portal, serta kelola User ID petugas.'
-                    : ' Akses menambah data transmigran, mengedit warkah/sertifikat, dan mengelola seluruh foto portal diaktifkan.'}
-                </span>
-              </div>
+      {currentOfficer && (
+        <div className={`${isCurrentOfficerAdmin ? 'bg-amber-700' : 'bg-emerald-800'} text-white text-xs px-4 py-2 font-medium flex items-center justify-between shadow-xs transition-colors`}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between max-w-7xl mx-auto w-full gap-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-white animate-pulse shrink-0" />
+              <span>
+                <strong>{isCurrentOfficerAdmin ? 'Hak Akses Penuh (Administrator Utama):' : 'Sesi Petugas Aktif:'}</strong> {currentOfficer.name} (NIP: {currentOfficer.nip} &middot; {currentOfficer.role}).
+                {isCurrentOfficerAdmin 
+                  ? ' Hak akses penuh aktif: edit data 2 kawasan & 8 UPT, input/edit data transmigran, manajemen foto portal, serta kelola User ID petugas.'
+                  : ' Akses terdaftar: input/edit data kependudukan & warkah sertifikat tanah lapangan. (Akses ganti foto portal & struktur kawasan khusus Administrator Utama).'}
+              </span>
+            </div>
 
-              <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
-                {isMainAdmin && (
-                  <>
-                    <button
-                      onClick={handleOpenKawasanUptModal}
-                      className="bg-amber-900 hover:bg-black/40 text-amber-100 px-2.5 py-1 rounded text-xs font-semibold cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm border border-amber-400/40"
-                      title="Buka panel edit seluruh data Kawasan dan UPT"
-                    >
-                      <Layers className="w-3.5 h-3.5 text-amber-300" />
-                      <span>Edit Kawasan & UPT</span>
-                    </button>
-                    <button
-                      onClick={() => setIsOfficerManageModalOpen(true)}
-                      className="bg-purple-900 hover:bg-purple-950 text-purple-100 px-2.5 py-1 rounded text-xs font-semibold cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm border border-purple-400/40"
-                      title="Buka panel kelola, tambah, dan rubah User ID petugas lapangan"
-                    >
-                      <Users className="w-3.5 h-3.5" />
-                      <span>Kelola Petugas Lapangan</span>
-                    </button>
-                  </>
-                )}
-                <button
-                  onClick={() => setIsAdminModalOpen(true)}
-                  className="bg-amber-900 hover:bg-black/40 text-white px-2.5 py-1 rounded text-xs font-semibold cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>+ Input Transmigran</span>
-                </button>
+            <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 flex-wrap">
+              {isCurrentOfficerAdmin && (
+                <>
+                  <button
+                    onClick={handleOpenKawasanUptModal}
+                    className="bg-amber-900 hover:bg-black/40 text-amber-100 px-2.5 py-1 rounded text-xs font-semibold cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm border border-amber-400/40"
+                    title="Buka panel edit seluruh data Kawasan dan UPT"
+                  >
+                    <Layers className="w-3.5 h-3.5 text-amber-300" />
+                    <span>Edit Kawasan & UPT</span>
+                  </button>
+                  <button
+                    onClick={() => setIsOfficerManageModalOpen(true)}
+                    className="bg-purple-900 hover:bg-purple-950 text-purple-100 px-2.5 py-1 rounded text-xs font-semibold cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm border border-purple-400/40"
+                    title="Buka panel kelola, tambah, dan rubah User ID petugas lapangan"
+                  >
+                    <Users className="w-3.5 h-3.5" />
+                    <span>Kelola Petugas Lapangan</span>
+                  </button>
+                </>
+              )}
+              <button
+                onClick={() => setIsAdminModalOpen(true)}
+                className="bg-amber-900 hover:bg-black/40 text-white px-2.5 py-1 rounded text-xs font-semibold cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>+ Input Transmigran</span>
+              </button>
+              {isCurrentOfficerAdmin && (
                 <button
                   onClick={() => setIsPhotoModalOpen(true)}
                   className="bg-amber-900 hover:bg-black/40 text-white px-2.5 py-1 rounded text-xs font-semibold cursor-pointer whitespace-nowrap flex items-center gap-1 shadow-sm"
+                  title="Ganti Foto Portal (Khusus Administrator Utama)"
                 >
                   <ImageIcon className="w-3.5 h-3.5" />
                   <span>Ganti Foto Portal</span>
                 </button>
-                <button
-                  onClick={handleLogout}
-                  className="bg-slate-950 hover:bg-slate-900 text-amber-200 hover:text-white px-2.5 py-1 rounded text-xs font-medium cursor-pointer whitespace-nowrap flex items-center gap-1"
-                  title="Keluar dari akun petugas"
-                >
-                  <LogOut className="w-3 h-3" />
-                  <span>Logout</span>
-                </button>
-              </div>
+              )}
+              <button
+                onClick={handleLogout}
+                className="bg-slate-950 hover:bg-slate-900 text-amber-200 hover:text-white px-2.5 py-1 rounded text-xs font-medium cursor-pointer whitespace-nowrap flex items-center gap-1"
+                title="Keluar dari akun petugas"
+              >
+                <LogOut className="w-3 h-3" />
+                <span>Logout</span>
+              </button>
             </div>
           </div>
-        );
-      })()}
+        </div>
+      )}
 
       {/* Header Bar with Official Logo & Officer Controls */}
       <Header
@@ -475,7 +496,7 @@ export default function App() {
         onOpenLoginModal={() => setIsLoginModalOpen(true)}
         onLogout={handleLogout}
         onOpenAddModal={() => setIsAdminModalOpen(true)}
-        onOpenPhotoModal={() => setIsPhotoModalOpen(true)}
+        onOpenPhotoModal={isCurrentOfficerAdmin ? () => setIsPhotoModalOpen(true) : undefined}
         onOpenOfficerManageModal={() => setIsOfficerManageModalOpen(true)}
         onOpenKawasanUptModal={handleOpenKawasanUptModal}
         logoUrl={portalImages.logoUrl}
@@ -492,7 +513,7 @@ export default function App() {
             onOpenCheckModal={() => setIsCheckModalOpen(true)}
             images={portalImages}
             currentOfficer={currentOfficer}
-            onOpenPhotoModal={() => setIsPhotoModalOpen(true)}
+            onOpenPhotoModal={isCurrentOfficerAdmin ? () => setIsPhotoModalOpen(true) : undefined}
             kawasanList={kawasanList}
             onEditKawasan={handleEditKawasan}
             onEditUPT={handleEditUPT}
@@ -549,7 +570,7 @@ export default function App() {
             onOpenReportModal={handleOpenReportFromInfrastructure}
             images={portalImages}
             currentOfficer={currentOfficer}
-            onOpenPhotoModal={() => setIsPhotoModalOpen(true)}
+            onOpenPhotoModal={isCurrentOfficerAdmin ? () => setIsPhotoModalOpen(true) : undefined}
             onOpenLoginModal={() => setIsLoginModalOpen(true)}
             onEditInfrastructure={handleOpenEditInfrastructure}
             onAddInfrastructure={handleOpenAddInfrastructure}

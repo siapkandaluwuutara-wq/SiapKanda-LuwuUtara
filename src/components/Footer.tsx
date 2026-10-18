@@ -105,7 +105,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, logoUrl = '/Luwu_Uta
           {/* Col 3: Kontak & Pelayanan Lapangan */}
           <div>
             <div className="text-xs font-semibold text-white uppercase tracking-wider mb-3">
-              Kontak Kantor Disnakertrans
+              Kontak Dinas Transmigrasi dan Tenaga Kerja
             </div>
             <div className="space-y-2 text-sm text-slate-300">
               <div className="flex items-start gap-2">

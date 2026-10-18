@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PortalImages, UPTRegion, OfficerUser } from '../types';
 import { DEFAULT_PORTAL_IMAGES } from '../data/portalImages';
-import { X, Image as ImageIcon, Upload, RefreshCw, CheckCircle2, Sparkles, Building, Layers, Eye } from 'lucide-react';
+import { X, Image as ImageIcon, Upload, RefreshCw, CheckCircle2, Sparkles, Building, Layers, Eye, ShieldAlert, AlertTriangle } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 
 interface PhotoManagerModalProps {
@@ -29,7 +29,88 @@ export const PhotoManagerModal: React.FC<PhotoManagerModalProps> = ({
   const [uptImages, setUptImages] = useState<Record<string, string>>(images.uptImages || {});
   const [savedNotice, setSavedNotice] = useState(false);
 
+  const isMainAdmin = Boolean(
+    currentOfficer && (
+      currentOfficer.isAdmin || 
+      currentOfficer.nip === '197909202010011002' || 
+      currentOfficer.role === 'Administrator Utama' ||
+      currentOfficer.userId === 'iswady_admin'
+    )
+  );
+
   if (!isOpen) return null;
+
+  if (!isMainAdmin) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-sm animate-in fade-in duration-200">
+        <div 
+          className="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-red-200 animate-in zoom-in-95 duration-200"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Restricted Header */}
+          <div className="p-5 bg-gradient-to-r from-red-800 via-rose-900 to-slate-950 text-white flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center text-rose-200 shadow-inner">
+                <ShieldAlert className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="font-bold text-sm text-white">Akses Pengelolaan Foto Dibatasi</h3>
+                <p className="text-[11px] text-rose-200">Khusus Administrator Utama</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-1.5 text-white/70 hover:text-white rounded-lg hover:bg-white/10 cursor-pointer"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+
+          <div className="p-6 space-y-4">
+            <div className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-950 text-xs leading-relaxed space-y-2">
+              <div className="font-bold flex items-center gap-1.5 text-rose-800">
+                <AlertTriangle className="w-4 h-4 shrink-0 text-rose-600" />
+                <span>Otoritas Khusus Administrator Utama</span>
+              </div>
+              <p>
+                Akses kelola dan ganti foto portal SIAP KANDA ditutup bagi <strong>Petugas Lapangan</strong> dan <strong>Petugas Verifikator</strong>.
+              </p>
+              <p className="text-slate-600">
+                Fitur ini secara khusus hanya diperuntukkan bagi <strong>Administrator Utama (Iswady, SE)</strong> guna menjaga integritas dan keselarasan visual resmi portal transmigrasi.
+              </p>
+            </div>
+
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs space-y-2 text-slate-700">
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Identitas Sesi Aktif</div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500">Nama Petugas:</span>
+                <span className="font-semibold text-slate-900">{currentOfficer?.name || 'Pengunjung Umum'}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500">NIP:</span>
+                <span className="font-mono text-slate-700">{currentOfficer?.nip || '-'}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-slate-500">Peran / Penugasan:</span>
+                <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                  {currentOfficer?.role || 'Umum'}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={onClose}
+                className="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold cursor-pointer transition-colors shadow-sm flex items-center justify-center gap-2"
+              >
+                <span>Mengerti & Tutup</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleFileUpload = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -69,6 +150,10 @@ export const PhotoManagerModal: React.FC<PhotoManagerModalProps> = ({
   };
 
   const handleSave = () => {
+    if (!isMainAdmin) {
+      alert('Akses Ditolak: Hanya Administrator Utama yang dapat menyimpan foto portal.');
+      return;
+    }
     const updated: PortalImages = {
       logoUrl,
       heroBanner,
@@ -85,6 +170,10 @@ export const PhotoManagerModal: React.FC<PhotoManagerModalProps> = ({
   };
 
   const handleResetDefaults = () => {
+    if (!isMainAdmin) {
+      alert('Akses Ditolak: Hanya Administrator Utama yang dapat mereset foto portal.');
+      return;
+    }
     if (confirm('Kembalikan semua gambar ke foto default sistem SIAP KANDA?')) {
       const defaults: PortalImages = { ...DEFAULT_PORTAL_IMAGES };
       setLogoUrl(defaults.logoUrl || '');
@@ -105,7 +194,7 @@ export const PhotoManagerModal: React.FC<PhotoManagerModalProps> = ({
         {/* Header */}
         <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between sticky top-0 z-10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shadow-sm shrink-0">
+            <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center shadow-sm shrink-0">
               <ImageIcon className="w-5 h-5" />
             </div>
             <div>
@@ -113,12 +202,12 @@ export const PhotoManagerModal: React.FC<PhotoManagerModalProps> = ({
                 <h3 className="font-bold text-slate-900 text-sm">
                   Kelola & Edit Semua Gambar / Foto Portal
                 </h3>
-                <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold">
-                  Mode Petugas
+                <span className="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-bold border border-amber-300">
+                  Administrator Utama
                 </span>
               </div>
               <p className="text-[11px] text-slate-500">
-                Petugas: <strong>{currentOfficer?.name || 'Petugas Disnakertrans'}</strong> &middot; Perbarui logo resmi, visual hero, sentra komoditas, dan foto dokumentasi UPT.
+                Administrator: <strong>{currentOfficer?.name || 'Iswady, SE'}</strong> &middot; Perbarui logo resmi, visual hero, sentra komoditas, dan foto dokumentasi UPT.
               </p>
             </div>
           </div>

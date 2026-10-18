@@ -11,7 +11,7 @@ interface HeaderProps {
   onOpenLoginModal: () => void;
   onLogout: () => void;
   onOpenAddModal: () => void;
-  onOpenPhotoModal: () => void;
+  onOpenPhotoModal?: () => void;
   onOpenOfficerManageModal?: () => void;
   onOpenKawasanUptModal?: () => void;
   logoUrl?: string;
@@ -32,7 +32,14 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [isOfficerMenuOpen, setIsOfficerMenuOpen] = useState(false);
 
-  const isMainAdmin = currentOfficer?.isAdmin || currentOfficer?.nip === '197909202010011002';
+  const isMainAdmin = Boolean(
+    currentOfficer && (
+      currentOfficer.isAdmin || 
+      currentOfficer.nip === '197909202010011002' || 
+      currentOfficer.role === 'Administrator Utama' ||
+      currentOfficer.userId === 'iswady_admin'
+    )
+  );
 
   const navItems = [
     { id: 'beranda', label: 'Beranda' },
@@ -141,13 +148,15 @@ export const Header: React.FC<HeaderProps> = ({
                     <span>+ Input Transmigran Baru</span>
                   </button>
 
-                  <button
-                    onClick={onOpenPhotoModal}
-                    className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 hover:text-emerald-700 text-left transition-colors cursor-pointer"
-                  >
-                    <ImageIcon className="w-4 h-4 text-emerald-600" />
-                    <span>Kelola & Ganti Foto Portal</span>
-                  </button>
+                  {isMainAdmin && onOpenPhotoModal && (
+                    <button
+                      onClick={onOpenPhotoModal}
+                      className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-slate-700 hover:bg-slate-100 hover:text-emerald-700 text-left transition-colors cursor-pointer"
+                    >
+                      <ImageIcon className="w-4 h-4 text-emerald-600" />
+                      <span>Kelola & Ganti Foto Portal</span>
+                    </button>
+                  )}
 
                   {isMainAdmin && onOpenKawasanUptModal && (
                     <button

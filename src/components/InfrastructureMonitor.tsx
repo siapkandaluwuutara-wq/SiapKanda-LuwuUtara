@@ -53,6 +53,14 @@ export const InfrastructureMonitor: React.FC<InfrastructureMonitorProps> = ({
   const [filterUpt, setFilterUpt] = useState<string>('all');
 
   const isOfficer = Boolean(currentOfficer);
+  const isMainAdmin = Boolean(
+    currentOfficer && (
+      currentOfficer.isAdmin || 
+      currentOfficer.nip === '197909202010011002' || 
+      currentOfficer.role === 'Administrator Utama' ||
+      currentOfficer.userId === 'iswady_admin'
+    )
+  );
 
   const filteredItems = infrastructureList.filter((item) => {
     const matchesKawasan = filterKawasan === 'all' || item.kawasan === filterKawasan;
@@ -149,10 +157,11 @@ export const InfrastructureMonitor: React.FC<InfrastructureMonitorProps> = ({
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
             />
-            {currentOfficer && onOpenPhotoModal && (
+            {isMainAdmin && onOpenPhotoModal && (
               <button
                 onClick={onOpenPhotoModal}
                 className="absolute top-3 right-3 z-20 flex items-center gap-1 px-2.5 py-1 rounded bg-slate-900/80 hover:bg-slate-900 text-white text-[11px] font-medium backdrop-blur-md border border-white/20 transition-all cursor-pointer shadow-md"
+                title="Ganti foto sarpras (Khusus Admin Utama)"
               >
                 <span>Ganti Foto Sarpras</span>
               </button>
