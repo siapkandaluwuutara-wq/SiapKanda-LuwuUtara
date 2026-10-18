@@ -7,7 +7,7 @@ import {
   INFRASTRUCTURE_DATA, 
   MOCK_FEEDBACK_TICKETS 
 } from './data/mockData';
-import { UPTRegion, TransmigrantKK, PublicFeedbackTicket, OfficerUser, OfficerAccount, PortalImages, KawasanInfo } from './types';
+import { UPTRegion, TransmigrantKK, PublicFeedbackTicket, OfficerUser, OfficerAccount, PortalImages, KawasanInfo, CommodityStat, InfrastructureItem } from './types';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { DashboardOverview } from './components/DashboardOverview';
@@ -20,6 +20,8 @@ import { PublicVerificationModal } from './components/PublicVerificationModal';
 import { TransmigrantDetailModal } from './components/TransmigrantDetailModal';
 import { AdminModal } from './components/AdminModal';
 import { EditKKModal } from './components/EditKKModal';
+import { EditCommodityModal } from './components/EditCommodityModal';
+import { EditInfrastructureModal } from './components/EditInfrastructureModal';
 import { PhotoManagerModal } from './components/PhotoManagerModal';
 import { OfficerLoginModal } from './components/OfficerLoginModal';
 import { OfficerManagementModal } from './components/OfficerManagementModal';
@@ -78,8 +80,31 @@ export default function App() {
     }
     return MOCK_TRANSMIGRANT_KK;
   });
-  const [commodities] = useState(COMMODITY_DATA);
-  const [infrastructureList] = useState(INFRASTRUCTURE_DATA);
+
+  const [commodities, setCommodities] = useState<CommodityStat[]>(() => {
+    try {
+      const saved = localStorage.getItem('siapkanda_commodity_data');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.warn('Storage read failed for commodity data:', e);
+    }
+    return COMMODITY_DATA;
+  });
+
+  const [infrastructureList, setInfrastructureList] = useState<InfrastructureItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('siapkanda_infrastructure_data');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.warn('Storage read failed for infrastructure data:', e);
+    }
+    return INFRASTRUCTURE_DATA;
+  });
+
   const [feedbackTickets, setFeedbackTickets] = useState<PublicFeedbackTicket[]>(MOCK_FEEDBACK_TICKETS);
 
   // Portal Images State (persisted in localStorage with GitHub Pages path sanitization)
@@ -124,6 +149,13 @@ export default function App() {
   const [detailModalKK, setDetailModalKK] = useState<TransmigrantKK | null>(null);
   const [editingKK, setEditingKK] = useState<TransmigrantKK | null>(null);
   const [isEditKKModalOpen, setIsEditKKModalOpen] = useState(false);
+  
+  // Commodity & Infrastructure Edit Modals
+  const [isEditCommodityModalOpen, setIsEditCommodityModalOpen] = useState(false);
+  const [editingCommodity, setEditingCommodity] = useState<CommodityStat | null>(null);
+  const [isEditInfraModalOpen, setIsEditInfraModalOpen] = useState(false);
+  const [editingInfra, setEditingInfra] = useState<InfrastructureItem | null>(null);
+
   const [selectedUPT, setSelectedUPT] = useState<UPTRegion | null>(null);
   const [feedbackDefaultCategory, setFeedbackDefaultCategory] = useState<string>('Keterlambatan SHM');
 
@@ -162,6 +194,22 @@ export default function App() {
       console.warn('Storage write skipped for portal_images:', e);
     }
   }, [portalImages]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('siapkanda_commodity_data', JSON.stringify(commodities));
+    } catch (e) {
+      console.warn('Storage write skipped for commodity_data:', e);
+    }
+  }, [commodities]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('siapkanda_infrastructure_data', JSON.stringify(infrastructureList));
+    } catch (e) {
+      console.warn('Storage write skipped for infrastructure_data:', e);
+    }
+  }, [infrastructureList]);
 
   useEffect(() => {
     try {
@@ -277,6 +325,78 @@ export default function App() {
     setDetailModalKK(null);
     setFeedbackDefaultCategory('Sengketa Batas Tanah');
     setActiveTab('layanan');
+  };
+
+  // Commodity Handlers for Admin
+  const handleSaveCommodity = (savedCommodity: CommodityStat) => {
+    setCommodities(prev => {
+      const exists = prev.some(c => c.id === savedCommodity.id);
+      if (exists) {
+        return prev.map(c => c.id === savedCommodity.id ? savedCommodity : c);
+      }
+      return [savedCommodity, ...prev];
+    });
+  };
+
+  const handleDeleteCommodity = (id: string) => {
+    setCommodities(prev => prev.filter(c => c.id !== id));
+  };
+
+  const handleResetCommodities = () => {
+    if (window.confirm('Kembalikan semua data komoditas ke pengaturan default awal?')) {
+      setCommodities(COMMODITY_DATA);
+      try {
+        localStorage.removeItem('siapkanda_commodity_data');
+      } catch (e) {
+        console.warn('Storage removal failed for commodity data:', e);
+      }
+    }
+  };
+
+  const handleOpenEditCommodity = (commodity: CommodityStat) => {
+    setEditingCommodity(commodity);
+    setIsEditCommodityModalOpen(true);
+  };
+
+  const handleOpenAddCommodity = () => {
+    setEditingCommodity(null);
+    setIsEditCommodityModalOpen(true);
+  };
+
+  // Infrastructure Handlers for Admin
+  const handleSaveInfrastructure = (savedItem: InfrastructureItem) => {
+    setInfrastructureList(prev => {
+      const exists = prev.some(i => i.id === savedItem.id);
+      if (exists) {
+        return prev.map(i => i.id === savedItem.id ? savedItem : i);
+      }
+      return [savedItem, ...prev];
+    });
+  };
+
+  const handleDeleteInfrastructure = (id: string) => {
+    setInfrastructureList(prev => prev.filter(i => i.id !== id));
+  };
+
+  const handleResetInfrastructure = () => {
+    if (window.confirm('Kembalikan semua data sarpras infrastruktur ke pengaturan default awal?')) {
+      setInfrastructureList(INFRASTRUCTURE_DATA);
+      try {
+        localStorage.removeItem('siapkanda_infrastructure_data');
+      } catch (e) {
+        console.warn('Storage removal failed for infrastructure data:', e);
+      }
+    }
+  };
+
+  const handleOpenEditInfrastructure = (item: InfrastructureItem) => {
+    setEditingInfra(item);
+    setIsEditInfraModalOpen(true);
+  };
+
+  const handleOpenAddInfrastructure = () => {
+    setEditingInfra(null);
+    setIsEditInfraModalOpen(true);
   };
 
   return (
@@ -413,6 +533,12 @@ export default function App() {
           <CommodityEconomy
             commodities={commodities}
             uptList={uptList}
+            currentOfficer={currentOfficer}
+            onOpenLoginModal={() => setIsLoginModalOpen(true)}
+            onEditCommodity={handleOpenEditCommodity}
+            onAddCommodity={handleOpenAddCommodity}
+            onDeleteCommodity={handleDeleteCommodity}
+            onResetCommodities={handleResetCommodities}
           />
         )}
 
@@ -424,6 +550,11 @@ export default function App() {
             images={portalImages}
             currentOfficer={currentOfficer}
             onOpenPhotoModal={() => setIsPhotoModalOpen(true)}
+            onOpenLoginModal={() => setIsLoginModalOpen(true)}
+            onEditInfrastructure={handleOpenEditInfrastructure}
+            onAddInfrastructure={handleOpenAddInfrastructure}
+            onDeleteInfrastructure={handleDeleteInfrastructure}
+            onResetInfrastructure={handleResetInfrastructure}
           />
         )}
 
@@ -516,6 +647,33 @@ export default function App() {
         initialSelectedUPTId={selectedUPTForEdit}
         initialSelectedKawasanId={selectedKawasanForEdit}
         currentOfficer={currentOfficer}
+      />
+
+      {/* Admin Edit Commodity Modal */}
+      <EditCommodityModal
+        isOpen={isEditCommodityModalOpen}
+        onClose={() => {
+          setIsEditCommodityModalOpen(false);
+          setEditingCommodity(null);
+        }}
+        commodity={editingCommodity}
+        currentOfficer={currentOfficer}
+        onSaveCommodity={handleSaveCommodity}
+        onDeleteCommodity={handleDeleteCommodity}
+      />
+
+      {/* Admin Edit Infrastructure Modal */}
+      <EditInfrastructureModal
+        isOpen={isEditInfraModalOpen}
+        onClose={() => {
+          setIsEditInfraModalOpen(false);
+          setEditingInfra(null);
+        }}
+        item={editingInfra}
+        uptList={uptList}
+        currentOfficer={currentOfficer}
+        onSaveItem={handleSaveInfrastructure}
+        onDeleteItem={handleDeleteInfrastructure}
       />
     </div>
   );
